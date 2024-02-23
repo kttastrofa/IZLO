@@ -19,22 +19,10 @@ void at_least_one_valid_street_for_each_step(CNF* formula, unsigned num_of_cross
 
     // pre kazdy krok i
     for (unsigned i=0; i<num_of_streets; ++i) {
-
         //kazdej ulice j
         for (unsigned j=0; j<num_of_streets; ++j) {
-
-            //kazdej krizovatky
-            for (unsigned k=0; k<num_of_crossroads; ++k) {
-                for (unsigned z=0; z<num_of_crossroads; ++z) {
-
-                    // existuje nejaka ulica so zaciatkom 'z' a koncom 'k'
-                    if (k==streets[j].crossroad_to && z==streets[j].crossroad_from) {
-                        Clause *cl = create_new_clause(formula);
-                        add_literal_to_clause(cl, true, j, z, k);
-
-                    }
-                }
-            }
+            Clause *cl = create_new_clause(formula);
+            add_literal_to_clause(cl, true, j, streets[j].crossroad_from, streets[j].crossroad_to);
         }
     }
 }
@@ -81,7 +69,24 @@ void streets_connected(CNF* formula, unsigned num_of_crossroads, unsigned num_of
     assert(num_of_crossroads > 0);
     assert(num_of_streets > 0);
 
-
+    for (int i = 0; i < num_of_streets; ++i) {
+        for (int j = 0; j < num_of_crossroads; ++j) {
+            for (int k = 0; k < num_of_crossroads; ++k) {
+                if (j != k) {
+                    Clause *cl = create_new_clause(formula);
+                    add_literal_to_clause(cl, true, i, j, k);
+                    cl = create_new_clause(formula);
+                    for (int jj = 0; jj < num_of_crossroads; ++jj) {
+                        for (int kk = 0; kk < num_of_crossroads; ++kk) {
+                            if (jj != j && kk != k && k == jj) {
+                                add_literal_to_clause(cl, false, i, jj, kk);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 
