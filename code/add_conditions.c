@@ -43,8 +43,8 @@ void at_most_one_street_for_each_step(CNF* formula, unsigned num_of_crossroads, 
         for (int j = 0; j < num_of_crossroads; ++j) {
             for (int k = 0; k < num_of_crossroads; ++k) {
                 // Ulice 2
-                for (int jj = 1; jj < num_of_crossroads; ++jj) {
-                    for (int kk = 1; kk < num_of_crossroads; ++kk) {
+                for (int jj = 0; jj < num_of_crossroads; ++jj) {
+                    for (int kk = 0; kk < num_of_crossroads; ++kk) {
                         // Pokud by měli být stejné přeskočíme jinak přidáme klauzuli
                         if (j != jj && k != kk) {
                             Clause *cl = create_new_clause(formula);
@@ -69,18 +69,18 @@ void streets_connected(CNF* formula, unsigned num_of_crossroads, unsigned num_of
     assert(num_of_crossroads > 0);
     assert(num_of_streets > 0);
 
-    for (int i = 0; i < num_of_streets; ++i) {
-        for (int j = 0; j < num_of_crossroads; ++j) {
-            for (int k = 0; k < num_of_crossroads; ++k) {
-                if (j != k) {
-                    Clause *cl = create_new_clause(formula);
-                    add_literal_to_clause(cl, true, i, j, k);
-                    cl = create_new_clause(formula);
-                    for (int jj = 0; jj < num_of_crossroads; ++jj) {
-                        for (int kk = 0; kk < num_of_crossroads; ++kk) {
-                            if (jj != j && kk != k && k == jj) {
-                                add_literal_to_clause(cl, false, i, jj, kk);
-                            }
+    //Kroky
+    for (int i = 0; i < num_of_streets - 1; i++) {
+        //Ulice 1
+        for (int j = 0; j < num_of_crossroads; j++) {
+            for (int k = 0; k < num_of_crossroads; k++) {
+                //Ulice 2
+                for (int jj = 0; jj < num_of_crossroads; jj++) {
+                    for (int kk = 0; kk < num_of_crossroads; kk++) {
+                        if (k != jj) {
+                            Clause *cl = create_new_clause(formula);
+                            add_literal_to_clause(cl, false, i, j, k);
+                            add_literal_to_clause(cl, false, i+1, jj, kk);
                         }
                     }
                 }
