@@ -48,34 +48,27 @@ void at_most_one_street_for_each_step(CNF* formula, unsigned num_of_crossroads, 
     assert(num_of_crossroads > 0);
     assert(num_of_streets > 0);
 
-    // pre kazdy krok
-    for (unsigned i=0; i<num_of_streets; ++i) {
-        // kazdej ulice
-        for (unsigned  j=0; j<num_of_streets; ++j) {
 
-            //kazdeho konca1
-                for (unsigned k1=0; k1<num_of_crossroads; ++k1) {
-                    //kazdeho konca2
-                    for (unsigned k2 = 0; k2 < num_of_crossroads; ++k2) {
-
-                        //kazdeho zaciatku1
-                        for (unsigned z1 = 0; z1 < num_of_crossroads; ++z1) {
-                            //kazdeho zaciatku2
-                            for (unsigned z2 = 0; z2 < num_of_crossroads; ++z2) {
-
-                                if ((z1!=z2 || k1!=k2) && (z1!=k1 || z2!=k2) && i!=j) {
-                                    Clause *cl = create_new_clause(formula);
-                                    add_literal_to_clause(cl, false, i, z1, k1);
-                                    add_literal_to_clause(cl, false, j, z2, k2);
-
-                                }
-                            }
+    // Krok
+    for (int i = 0; i < num_of_streets; ++i) {
+        // Ulice 1
+        for (int j = 0; j < num_of_crossroads; ++j) {
+            for (int k = 0; k < num_of_crossroads; ++k) {
+                // Ulice 2
+                for (int jj = 1; jj < num_of_crossroads; ++jj) {
+                    for (int kk = 1; kk < num_of_crossroads; ++kk) {
+                        // Pokud by měli být stejné přeskočíme jinak přidáme klauzuli
+                        if (j != jj && k != kk) {
+                            Clause *cl = create_new_clause(formula);
+                            add_literal_to_clause(cl, false, i, j, k);
+                            add_literal_to_clause(cl, false, i, jj, kk);
                         }
                     }
                 }
             }
         }
     }
+}
 
 
 
@@ -88,33 +81,7 @@ void streets_connected(CNF* formula, unsigned num_of_crossroads, unsigned num_of
     assert(num_of_crossroads > 0);
     assert(num_of_streets > 0);
 
-    // pre kazdy krok
-    for (unsigned i=0; i<num_of_streets-1; ++i) {
 
-        unsigned j=i+1;
-
-        //kazdeho konca1
-        for (unsigned k1=0; k1<num_of_crossroads; ++k1) {
-            //kazdeho konca2
-            for (unsigned k2 = 0; k2 < num_of_crossroads; ++k2) {
-
-                //kazdeho zaciatku1
-                for (unsigned z1 = 0; z1 < num_of_crossroads; ++z1) {
-                    //kazdeho zaciatku2
-                    for (unsigned z2 = 0; z2 < num_of_crossroads; ++z2) {
-
-//  !!!!!                        //mas podmienku, kt ti to neprejde loopmi, zato to nejde (aj hore)
-                        if ((z1!=z2 || k1!=k2) && (z1!=k1 || z2!=k2) && i!=j && k1==z2) {
-                            Clause *cl = create_new_clause(formula);
-                            add_literal_to_clause(cl, false, i, z1, k1);
-                            add_literal_to_clause(cl, false, j, z2, k2);
-
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 
@@ -125,7 +92,7 @@ void streets_do_not_repeat(CNF* formula, unsigned num_of_crossroads, unsigned nu
     assert(formula != NULL);
     assert(num_of_crossroads > 0);
     assert(num_of_streets > 0);
-    
+
     for (unsigned i = 0; i < num_of_streets; ++i) {
         // pro kazdy krok i
         for (unsigned j = 0; j < num_of_streets; ++j) {
