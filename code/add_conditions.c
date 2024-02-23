@@ -50,25 +50,21 @@ void at_most_one_street_for_each_step(CNF* formula, unsigned num_of_crossroads, 
 
     // pre kazdy krok
     for (unsigned i=0; i<num_of_streets; ++i) {
-        // kazdej ulice
-        for (unsigned  j=0; j<num_of_streets; ++j) {
 
-            //kazdeho konca1
-                for (unsigned k1=0; k1<num_of_crossroads; ++k1) {
-                    //kazdeho konca2
-                    for (unsigned k2 = 0; k2 < num_of_crossroads; ++k2) {
+        //kazdeho konca1
+            for (unsigned k1=0; k1<num_of_crossroads; ++k1) {
+                //kazdeho konca2
+                for (unsigned k2 = 0; k2 < num_of_crossroads; ++k2) {
 
-                        //kazdeho zaciatku1
-                        for (unsigned z1 = 0; z1 < num_of_crossroads; ++z1) {
-                            //kazdeho zaciatku2
-                            for (unsigned z2 = 0; z2 < num_of_crossroads; ++z2) {
+                    //kazdeho zaciatku1
+                    for (unsigned z1 = 0; z1 < num_of_crossroads; ++z1) {
+                        //kazdeho zaciatku2
+                        for (unsigned z2 = 0; z2 < num_of_crossroads; ++z2) {
 
-                                if ((z1!=z2 || k1!=k2) && (z1!=k1 || z2!=k2) && i!=j) {
-                                    Clause *cl = create_new_clause(formula);
-                                    add_literal_to_clause(cl, false, i, z1, k1);
-                                    add_literal_to_clause(cl, false, j, z2, k2);
-
-                                }
+                            if (z1!=z2 && k1!=k2) {
+                                Clause *cl = create_new_clause(formula);
+                                add_literal_to_clause(cl, false, i, z1, k1);
+                                add_literal_to_clause(cl, false, i, z2, k2);
                             }
                         }
                     }
@@ -91,8 +87,6 @@ void streets_connected(CNF* formula, unsigned num_of_crossroads, unsigned num_of
     // pre kazdy krok
     for (unsigned i=0; i<num_of_streets-1; ++i) {
 
-        unsigned j=i+1;
-
         //kazdeho konca1
         for (unsigned k1=0; k1<num_of_crossroads; ++k1) {
             //kazdeho konca2
@@ -104,10 +98,10 @@ void streets_connected(CNF* formula, unsigned num_of_crossroads, unsigned num_of
                     for (unsigned z2 = 0; z2 < num_of_crossroads; ++z2) {
 
 //  !!!!!                        //mas podmienku, kt ti to neprejde loopmi, zato to nejde (aj hore)
-                        if ((z1!=z2 || k1!=k2) && (z1!=k1 || z2!=k2) && i!=j && k1==z2) {
+                        if ((z1!=z2 || k1!=k2) && (z1!=k1 || z2!=k2) && k1==z2) {
                             Clause *cl = create_new_clause(formula);
                             add_literal_to_clause(cl, false, i, z1, k1);
-                            add_literal_to_clause(cl, false, j, z2, k2);
+                            add_literal_to_clause(cl, true, i, z2, k2);
 
                         }
                     }
