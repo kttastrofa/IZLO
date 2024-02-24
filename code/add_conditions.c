@@ -20,9 +20,9 @@ void at_least_one_valid_street_for_each_step(CNF* formula, unsigned num_of_cross
     // pre kazdy krok i
     for (unsigned i=0; i<num_of_streets; ++i) {
         //kazdej ulice j
+        Clause *cl = create_new_clause(formula);
         for (unsigned j=0; j<num_of_streets; ++j) {
-            Clause *cl = create_new_clause(formula);
-            add_literal_to_clause(cl, true, j, streets[j].crossroad_from, streets[j].crossroad_to);
+            add_literal_to_clause(cl, true, i, streets[j].crossroad_from, streets[j].crossroad_to);
         }
     }
 }
@@ -46,7 +46,7 @@ void at_most_one_street_for_each_step(CNF* formula, unsigned num_of_crossroads, 
                 for (int jj = 0; jj < num_of_crossroads; ++jj) {
                     for (int kk = 0; kk < num_of_crossroads; ++kk) {
                         // Pokud by měli být stejné přeskočíme jinak přidáme klauzuli
-                        if (j != jj && k != kk) {
+                        if ((k != kk || j != jj )&& (j != k || jj != kk)) {
                             Clause *cl = create_new_clause(formula);
                             add_literal_to_clause(cl, false, i, j, k);
                             add_literal_to_clause(cl, false, i, jj, kk);
