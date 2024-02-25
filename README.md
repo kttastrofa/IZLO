@@ -1,2 +1,0 @@
-# IZLO
-dnesok spravi
