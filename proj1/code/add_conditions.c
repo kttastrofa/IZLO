@@ -79,28 +79,25 @@ void streets_connected(CNF* formula, unsigned num_of_crossroads, unsigned num_of
 
     // pre kazdy krok
     for (unsigned i=0; i<num_of_streets-1; ++i) {
-
         //kazdeho zaciatku
+        for (unsigned k1=0; k1<num_of_crossroads; ++k1) {
         for (unsigned z1 = 0; z1 < num_of_crossroads; ++z1) {
-            for (unsigned z2 = 0; z2 < num_of_crossroads; ++z2) {
-
+            Clause *cl = create_new_clause(formula);
+            add_literal_to_clause(cl, false, i, z1, k1);
                 //kazdeho konca
-                for (unsigned k1=0; k1<num_of_crossroads; ++k1) {
+                //for (unsigned z2 = 0; z2 < num_of_crossroads; ++z2) {
                     for (unsigned k2 = 0; k2 < num_of_crossroads; ++k2) {
-
                         //exituje konexia konca s nejakym zaciatkom inej ulice
-                        if (k1!=z2) {
-                            Clause *cl = create_new_clause(formula);
-                            add_literal_to_clause(cl, false, i, z1, k1);
-                            add_literal_to_clause(cl, false, i+1, z2, k2);
+                        //if (k1!=z2) {
+                            add_literal_to_clause(cl, true, i+1, k1, k2);
 
                         }
                     }
                 }
             }
         }
-    }
-}
+    //}
+//}
 
 
 // Tato funkce by mela do formule pridat klauzule predstavujici podminku 4)
