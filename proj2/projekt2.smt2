@@ -19,8 +19,8 @@
 
 
 (assert
-    (forall ((D2 Int)(E2 Int)) ;k
-        (exists((D Int)(E Int)) ;k
+    (exists((D Int)(E Int)) ;k
+        (forall ((D2 Int)(E2 Int)) ;k
             (=> ;todo
                 (> (+ D E) Y) ;todo
                 (and ;todo
@@ -32,14 +32,27 @@
 )
 
 
+
 (assert
     (forall ((A Int)(B Int)(C Int))
         (exists ((D Int)(E Int))
-            (or
-                (> (+ D E) (+(- (* A A B 2) (* A B B 2))(* B 5 B)) ) ;todo pridaj podmienky na x<E, y+2<D
-                (> (+ D E) (+(+ (* A A B 2) (* A B B 2))(* B 5 A)) )
-                (> (+ D E) (+(- (* A A B 2) (* A B B 2))(* C B)) )
-                (> (+ D E) (-(+ (* A A B 2) (* A B B 2))(* C A)) )
+            (and
+                (> D 0)
+                (> E 0)
+                (or
+                    (and (> E (* A B 2)) (> D (+(* A B 2)(* 5 B)) )
+                        (> (+ D E) (+(-(* A A B 2)(* A B B 2))(* B 5 B)) )
+                    )
+                    (and (> E (* A B 2)) (<= D (+(* A B 2)(* 5 B)) )
+                        (> (+ D E) (+(+(* A A B 2)(* A B B 2))(* B 5 A)) )
+                    )
+                    (and (<= E (* A B 2)) (> D (-(* A B 2) C) )
+                        (> (+ D E) (+(-(* A A B 2)(* A B B 2))(* C B)) )
+                    )
+                    (and (<= E (* A B 2)) (<= D (-(* A B 2) C) )
+                        (> (+ D E) (-(+(* A A B 2)(* A B B 2))(* C A)) )
+                    )
+                )
             )
         )
     )
