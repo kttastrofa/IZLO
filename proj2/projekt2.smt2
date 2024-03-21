@@ -19,13 +19,13 @@
 
 
 (assert
-    (forall ((Y Int))
-        (exists((D Int)(E Int))
-            (=>
-                (> (+ D E) Y)
-                (and
-                    (>= Y (+ D E)) ;prepis z "kazde cislo ma od seba mensie v tvare D+E" na "D+E maju vzdy od seba vacsie a ak je mensie, tak je im rovne TIEZ NIE"
-                ); "D+E su najblizsie k 0 ako mozu" = "kazde ine D+E, pre ktore plati ABC, je vacsie"
+    (forall ((D2 Int)(E2 Int)) ;k
+        (exists((D Int)(E Int)) ;k
+            (=> ;todo
+                (> (+ D E) Y) ;todo
+                (and ;todo
+                    (>= Y (+ D E)) ;todo prepis z "kazde cislo ma od seba mensie v tvare D+E" na "D+E maju vzdy od seba vacsie a ak je mensie, tak je im rovne TIEZ NIE"
+                );todo "D+E su najblizsie k 0 ako mozu" = "kazde ine D+E, pre ktore plati ABC, je vacsie"
             )
         )
     )
@@ -36,7 +36,7 @@
     (forall ((A Int)(B Int)(C Int))
         (exists ((D Int)(E Int))
             (or
-                (> (+ D E) (+(- (* A A B 2) (* A B B 2))(* B 5 B)) ) ;pridaj podmienky na x<E, y+2<D
+                (> (+ D E) (+(- (* A A B 2) (* A B B 2))(* B 5 B)) ) ;todo pridaj podmienky na x<E, y+2<D
                 (> (+ D E) (+(+ (* A A B 2) (* A B B 2))(* B 5 A)) )
                 (> (+ D E) (+(- (* A A B 2) (* A B B 2))(* C B)) )
                 (> (+ D E) (-(+ (* A A B 2) (* A B B 2))(* C A)) )
