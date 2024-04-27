@@ -1,0 +1,60 @@
+%include 'rw32.inc'
+
+section .data
+    x dd 5
+    a dd 1
+
+section .text
+f1: 
+    mov eax, [x]
+    mov ebx, [x]
+    mov ecx, [a]
+    dec ebx
+    mul ebx
+
+    mul ecx
+    mov [a], eax
+
+    dec ebx
+    mov [x], ebx
+
+    jns f1
+    
+    ret
+
+f2:
+    mov ebx, [x]
+    mov eax, [a]
+    mov ecx, [a]
+    inc ecx
+    mul ecx
+
+    mov [a], eax
+
+    cmp ebx, [a]
+    ja f2
+    
+    ret
+
+
+main:
+    push ebp
+    mov ebp, esp
+
+    ;scitame 2 cisla
+    ;vysledok do EAX
+    ;pozor na hodnoty v registroch
+    push eax
+    push ebx
+    push ecx
+    push edx
+
+    call f2
+
+    pop eax ;pozor na navratove adresy v zasobniku
+    pop ebx
+    pop ecx
+    pop edx
+
+    pop ebp
+    ret

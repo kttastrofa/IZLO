@@ -1,0 +1,30 @@
+%include 'rw32.inc'
+
+section .data
+    x dd 10
+    a dd 5
+    x1 dd 100
+    a1 dd 5
+
+
+section .text
+main:
+    push ebp
+    mov ebp, esp
+
+    mov al, [x]
+    mov bl, [a]
+    mul bl
+
+    jno pretieklo
+
+    ;jnc konec
+
+    pop ebp
+    ret
+
+pretieklo:
+;pokud preteceni skok a +50
+    add al, 50
+    pop ebp
+    ret

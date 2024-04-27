@@ -1,0 +1,74 @@
+%include "rw32.inc"
+
+section .data
+    x dd 1, 2, 3, 0x4, 10010b
+    y dd 1.0, 2.5, 3.0, 2e5
+    i dw 1000
+    j db 100
+    s db "Hello FOg!"
+    c db 'a'
+
+section .text
+
+fn:
+    push ebp
+    mov ebp,esp
+    push ecx
+    push edx
+    sub eax,100
+    cmp eax,0
+    jl .below
+    sub eax,100
+.below:
+    add eax,200
+    pop edx
+    pop ecx
+    pop ebp
+    ret
+
+testRW32:
+    ;call ReadInt8
+    ;call WriteInt8
+    ;call ReadInt16
+    ;call WriteInt16
+    call ReadInt32
+    call WriteInt32
+    ;call ReadUint8
+    ;call WriteUint8
+    ;call ReadUint16
+    ;call WriteUint16
+    ;call ReadUint32
+    ;call WriteUint32
+    ;call ReadFloat
+    ;call WriteFloat
+    ;call ReadDouble
+    ;call WriteDouble
+    ;call ReadChar
+    ;call WriteChar
+    ;call ReadString
+    ;call WriteString
+    ret
+
+main:
+    enter 0,0
+.equal10:
+    call testRW32
+    cmp eax,10
+    ja .above10
+    je .equal10
+    jmp .below10
+.above10:
+    add eax,[x + 4]
+    mov ebx,[y]
+.below10:
+    call WriteInt32
+    push x
+    push 2
+    push 1
+    call fn
+    add esp,12
+    mov dword [y + 4], 5
+    mov ecx,100
+exit
+    leave
+    ret

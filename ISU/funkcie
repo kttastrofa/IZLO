@@ -1,0 +1,31 @@
+%include 'rw32.inc'
+
+section .data
+    x dd 10
+    a dd 5
+
+section .text
+f1: ;pozor na funkce uprostred mainu - moze posobit errory
+    push eax
+    push edx
+    ;push cokolvek co treba
+    mov eax, [x]
+    add eax, [a]
+    mov [x], eax
+    ;mov [a], edx ;keby nasobime napr
+    pop eax ;pozor na navratove adresy v zasobniku
+    pop edx
+    ret
+
+main:
+    push ebp
+    mov ebp, esp
+
+    ;scitame 2 cisla
+    ;vysledok do EAX
+    ;pozor na hodnoty v registroch
+
+    call f1
+
+    pop ebp
+    ret

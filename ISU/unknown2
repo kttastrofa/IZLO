@@ -1,0 +1,19 @@
+fstcw [cw]
+    and dword [cw], 0xfff0
+    fldcw [cw]
+
+    fld1
+    fldpi
+
+    fcom
+    ;fucom   ;~compare of unordered 
+
+
+    fwait  ;instrukce ceka na zpracovani vynimek
+
+    fstp st0
+    fstp st0
+    ; ~ pop
+
+
+    FPU_INF_POS EQU 0x7f800000 

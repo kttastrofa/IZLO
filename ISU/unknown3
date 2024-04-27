@@ -1,0 +1,122 @@
+%include 'rw32.inc'
+
+section .data
+    array dd 1.4, 5.0, -5.9, 5.6, 4.2, -7.7, 0.0
+    narray dd 7.8, 9.0, -6.4, 3.2, 8.2, -5.7, 3.6
+    N dw 5
+
+section .text
+
+extern malloc
+
+fn:
+    push esp
+    mov ebp, esp
+    ;esp +8 --cislo
+
+    fld dword [ebp+8]
+    fldpi
+    fmulp
+
+    mov eax, 123
+    mov ecx, -333
+    mov edx, 987
+
+    pop ebp
+    ret
+
+absolutno:
+    push ebp
+    mov ebp, esp
+    push esi
+    push edi
+    push edx
+    ;mov ebx, array
+
+    ;ebp +8     --*array
+    ;    +12    --N
+    ;    +16    --*fn
+    ;
+
+
+    push dword [ebp+12]
+    shl dword [esp], 2
+    call malloc
+    add esp, 4
+
+    mov ecx, [ebp+12]
+    ;mov [[ebp+8]+ecx*4]  NEJDE :((
+    mov esi, [ebp+8]
+    .for:
+        push ecx
+        push dword [esi+ecx*4-4];fld [esi+ecx*4-4]
+
+        fld dword [esp]
+        ;fld1
+        
+        ; v pripade funkcnosti jp
+        ;;fucomi
+        ;;fstp st0
+        ;;jp .jeNAN
+
+        fxam ;fcomp
+        fstp st0
+        fstsw ax
+        and ax, 0x4500
+        PFU_sw_c0 EQU 0x0100
+        cmp ax, PFU_sw_c0
+        je .jeNAN
+
+        ;; 2. verzia pro vic bodiku:: 
+        call [ebp+16] ;call fn ~ FASB
+        add esp, 4
+        pop ecx
+        fstp [edi + ecx*4 -4] ;zmenili sme eax na edi, bo malloc n spol
+
+        jmp .end
+
+        .jeNAN:
+            add esp, 4
+            pop ecx
+            mov dword [edi+ecx*4-4], 0x7f800000
+
+
+        .end:
+    loop .for
+
+mov eax, edi
+;chybka pop ecx
+pop edi
+pop esi
+pop ebp
+ret 
+
+main:
+
+    ;nacte array prvek po prvku, zrobi absolutnu hodnotu aa ulozi do noveho pola
+
+    push ebp
+    mov ebp, esp
+    mov ebx, array
+
+    mov esi, ebx
+    mov ecx, 7
+    call WriteArrayFloat
+    call WriteNewLine
+
+    push dword fn
+    push dword[N]
+    push ebx
+    ;... dopis si main, zlato, ked si si ho zmazala
+
+    call absolutno
+
+    add esp, 12
+    mov esi, eax
+    mov ecx, 5
+    call WriteArrayFloat
+    call WriteNewLine
+
+pop ebp
+ret 
+
