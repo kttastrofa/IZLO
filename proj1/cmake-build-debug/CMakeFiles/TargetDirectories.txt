@@ -1,3 +1,0 @@
-/home/katorec/CLionProjects/IZLO/cmake-build-debug/CMakeFiles/IZLO.dir
-/home/katorec/CLionProjects/IZLO/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/katorec/CLionProjects/IZLO/cmake-build-debug/CMakeFiles/rebuild_cache.dir
